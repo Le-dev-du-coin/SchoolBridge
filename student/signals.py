@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.contrib.auth.models import User
+from core.models import User
 from .models import Student
 
 @receiver(post_save, sender=User)
@@ -10,4 +10,5 @@ def create_student_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def save_student_profile(sender, instance, **kwargs):
-    instance.save_student_profile.save()
+    if hasattr(instance, 'student'):
+        instance.student.save()
