@@ -2,12 +2,14 @@ from django.core.management.base import BaseCommand
 from school.models import University
 import pycountry
 import csv
+import os
 
 class Command(BaseCommand):
     help = 'Importation des universite depuis le fichier CSV'
 
     def handle(self, **args):
-        with open('./world-universities.csv', 'r') as file:
+        file_path = os.path.join(os.path.dirname(__file__), 'world-universities.csv')
+        with open(file_path, 'r') as file:
             reader = csv.reader(file)
             for row in reader:
                 country_code, name, website = row 
@@ -18,7 +20,7 @@ class Command(BaseCommand):
                 # Save University in the database
                 University.objects.get_or_create(
                     country_code = country_code,
-                    country_name = country_code,
+                    country_name = country_name,
                     name = name,
                     website = website
                 )
