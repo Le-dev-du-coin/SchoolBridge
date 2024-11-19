@@ -6,3 +6,4 @@ class UniversitySerlializers(serializers.Serializer):
     class Meta:
         model = University
         fields = ["__all__"]
+    

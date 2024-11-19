@@ -10,6 +10,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ["username", "first_name", "last_name", "email", "password", "password2"]
         extra_kwargs = {'password': {'write_only': True}, "password2": {"write_only": True}}
+        read_only_field = ["is_active", "is_validated"]
 
     def validate(self, attrs):
         password = attrs.get("password", "")

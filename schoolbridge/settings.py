@@ -28,9 +28,9 @@ DJANGO_APP = [
 ]
 
 LIBS_APP = [
+    'corsheaders',
     'rest_framework',
-     'rest_framework.authtoken',
-     'corsheaders',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 PROJECTS_APP = [
@@ -86,13 +86,21 @@ DATABASES = {
 
 # # Django Rest Framework
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ],
+     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+      ],
 }
+
+
+# settings.py
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
 
 from datetime import timedelta
 
@@ -161,5 +169,7 @@ EMAIL_USE_TLS = True
 #EMAIL_FROM_EMAIL = config('EMAIL_FROM_EMAIL')
 
 
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOWS_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8080",  # Remplacez par l'URL de votre frontend
+]
+CORS_ALLOW_CREDENTIALS = True

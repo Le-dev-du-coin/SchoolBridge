@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 
 
 class User(AbstractUser):
@@ -26,8 +27,12 @@ class User(AbstractUser):
 
 
 class OnetimePasscode(models.Model):
-    user = models.ForeignKey(User, verbose_name="Utilisateur", on_delete=models.CASCADE)
+    user = models.OneToOneField(User, verbose_name="Utilisateur", on_delete=models.CASCADE)
     code = models.CharField(verbose_name="Code OTP", max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def is_valid(self):
+        return (timezone.now() - self.created_at).total_seconds() < 120
 
     def __str__(self):
         return f"{self.user.email} - Code OTP: {self.code}"
