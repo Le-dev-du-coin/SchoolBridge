@@ -1,9 +1,9 @@
 from core.serializers import RegisterSerializer, LoginSerialiser, OtpSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from django.contrib.auth import authenticate,  login, logout
 from rest_framework_simplejwt.tokens import RefreshToken
 #from rest_framework.authtoken.models import Token
-from django.contrib.auth import authenticate,  login, logout
 from core.models import User, OnetimePasscode
 from rest_framework.response import Response
 from core.utils import send_otp_code
@@ -108,7 +108,6 @@ def aut_login(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 # -------------------------- 
 # Logout
 # --------------------------
@@ -132,20 +131,22 @@ def auth_logout(request):
 # quitte la page de verification pour une raison ou pour une autre
 # --------------------------
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])  # Assurez-vous que l'utilisateur est authentifié
+@permission_classes([IsAuthenticated])
 def check_validation(request):
     user = request.user
     return Response({"isValidated": user.is_validated}, status=status.HTTP_200_OK)
 
+
+# -------------------------- 
+# Resend OPT Code
+# --------------------------
 @api_view(['POST'])
 def resend_otp_code(request):
     user = request.user
     email = user.email
+    
+    otp_code = OnetimePasscode.objects.get(user=user)
+    otp_code.delete()
+    
     send_otp_code(email=email)
     return Response({"success": "Code renvoyé avec success"}, status.HTTP_200_OK)
-
-
-@api_view(['GET'])
-def check_authentication(request):
-    pass
-

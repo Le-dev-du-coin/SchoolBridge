@@ -1,5 +1,6 @@
-from pathlib import Path
 from decouple import config
+from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,6 +32,8 @@ LIBS_APP = [
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
+    'django_countries',
+    'djmoney',
 ]
 
 PROJECTS_APP = [
@@ -173,3 +176,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",  # Remplacez par l'URL de votre frontend
 ]
 CORS_ALLOW_CREDENTIALS = True
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  #
